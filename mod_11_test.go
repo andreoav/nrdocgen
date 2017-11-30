@@ -3,7 +3,7 @@ package generators_test
 import (
 	"testing"
 
-	"github.com/andreoav/webapp/generators"
+	"github.com/andreoav/gogenerators-br/generators"
 	"github.com/stretchr/testify/assert"
 )
 

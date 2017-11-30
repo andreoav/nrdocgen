@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/andreoav/webapp/generators"
+	"github.com/andreoav/gogenerators-br/generators"
 )
 
 const (
