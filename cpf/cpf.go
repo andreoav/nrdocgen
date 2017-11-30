@@ -2,96 +2,87 @@ package cpf
 
 import (
 	"fmt"
-	"math/rand"
 	"strconv"
 	"strings"
-	"time"
+
+	"github.com/andreoav/webapp/generators"
 )
 
 const (
-	REMINDER_1 = 10 + iota
-	REMINDER_2
+	// FACTOR1 used for the first verification number
+	FACTOR1 = 10 + iota
+
+	// FACTOR2 used for the second verification number
+	FACTOR2
+
+	// SIZE of the slice of digits
+	SIZE = 9
+
+	// MIN digit allowed
+	MIN = 0
+
+	// MAX digit allowed
+	MAX = 9
 )
 
-// MASK of a valid CPF
+// MASK CPF for formatting output
 const MASK = "%d%d%d.%d%d%d.%d%d%d-%d%d"
 
-// CPF struct creates valid CPF numbers
-// has an option to create raw numbers or formatted ones
+// CPF struct creates valid CPF numbers and has an
+// option to create raw numbers or formatted ones
 type CPF struct {
+	generators.Document
 	digits []int
 }
 
 // Generate creates a new valid CPF
 func (c *CPF) Generate() *CPF {
-	c.digits = c.randomDigits()
+	c.digits = c.RandomDigits(SIZE, MIN, MAX)
 
-	c.addVerification(c.verification(REMINDER_1))
-	c.addVerification(c.verification(REMINDER_2))
+	c.addVerification(c.verification(FACTOR1))
+	c.addVerification(c.verification(FACTOR2))
 
 	return c
 }
 
 // Value returns a raw CPF number
-func (c *CPF) Value() string {
+func (c CPF) Value() string {
 	return c.joinNumbers(c.digits)
 }
 
 // Format returns a formatted CPF number
-func (c *CPF) Format() string {
+func (c CPF) Format() string {
 	var numbers = make([]interface{}, len(c.digits))
 
-	for i, digit := range c.digits {
-		numbers[i] = digit
+	for i := range c.digits {
+		numbers[i] = c.digits[i]
 	}
 
 	return fmt.Sprintf(MASK, numbers...)
 }
 
-func (c *CPF) verification(base int) int {
+func (c CPF) verification(base int) int {
 	var sum int
 
-	for index, digit := range c.digits {
-		sum += (base - index) * digit
+	for i := range c.digits {
+		sum += (base - i) * c.digits[i]
 	}
 
-	reminder := sum % 11
-
-	if reminder < 2 {
-		return 0
-	}
-
-	return 11 - reminder
+	return c.Mod11.Generate(sum)
 }
 
 func (c *CPF) addVerification(number int) {
 	c.digits = append(c.digits, number)
 }
 
-func (c *CPF) joinNumbers(digits []int) string {
+func (c CPF) joinNumbers(digits []int) string {
 	var strNumber = []string{}
 
-	for _, i := range digits {
-		strNumber = append(strNumber, strconv.Itoa(i))
+	for i := range digits {
+		strNumber = append(strNumber, strconv.Itoa(digits[i]))
 	}
 
 	return strings.Join(strNumber, "")
-}
-
-func (c *CPF) randomDigits() []int {
-	c.makeSeed()
-
-	arr := make([]int, 9)
-
-	for r := 0; r < 9; r++ {
-		arr[r] = rand.Intn(9)
-	}
-
-	return arr
-}
-
-func (c *CPF) makeSeed() {
-	rand.Seed(time.Now().UnixNano())
 }
 
 // New creates a new CPF Generator
