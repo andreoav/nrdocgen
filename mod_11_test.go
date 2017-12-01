@@ -1,13 +1,13 @@
-package generators_test
+package nrdocgen_test
 
 import (
 	"testing"
 
-	"github.com/andreoav/gogenerators-br/generators"
+	"github.com/andreoav/nrdocgen"
 	"github.com/stretchr/testify/assert"
 )
 
-var mod11 = &generators.Mod11{}
+var mod11 = &nrdocgen.Mod11{}
 
 func TestMod11_Generate(t *testing.T) {
 	tests := []struct {

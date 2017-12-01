@@ -1,4 +1,4 @@
-package generators
+package nrdocgen
 
 // Documenter interface used in some generators
 type Documenter interface {

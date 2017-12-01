@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/andreoav/gogenerators-br/generators"
+	"github.com/andreoav/nrdocgen"
 )
 
 const (
@@ -31,7 +31,7 @@ const MASK = "%d%d%d.%d%d%d.%d%d%d-%d%d"
 // CPF struct creates valid CPF numbers and has an
 // option to create raw numbers or formatted ones
 type CPF struct {
-	generators.Document
+	nrdocgen.Document
 	digits []int
 }
 

@@ -1,4 +1,4 @@
-package generators
+package nrdocgen
 
 // Mod11 struct
 type Mod11 struct{}
